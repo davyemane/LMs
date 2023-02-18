@@ -2,8 +2,8 @@ from rest_framework.response import Response
 from rest_framework import status, viewsets
 from rest_framework import generics
 from rest_framework.views import APIView
-from rest_framework import mixins
-from formation.vocabSerializer import ChampSerializer, NiveauSerializer, ContenuSerializer, MotFrSerializer, TraductionSerializer
+from rest_framework import permissions, authentication
+from formation.vocabSerializer import ChampSerializer, NiveauSerializer, ContenuSerializer, MotFrSerializer, TraductionSerializer, ContenusSerializer
 from.serializer import*
 from .models import *
 
@@ -36,50 +36,50 @@ class UpdateLangueView(generics.UpdateAPIView):
 
 
 
-class ChampListApiView(APIView):
-    def get(self, request, *args, **kwargs):
-        champ = ChampLexicale.objects.filter('Niveau')
-        serializer = ChampSerializer(champ(), many=True)
-        return Response(serializer.data, status=status.HTTP_200_OK)
-    
-    def post(self, request,*args, **kwargs):
-
-        data = {
-            "NomChamp":request.data.get('NomChamp'),
-            "Niveau":request.Niveau.id_Niveau
-        }
-        serializer = ChampSerializer(data=data)
-        if serializer.is_valid():
-            serializer.save()
-            return Response(serializer.data, status=status.HTTP_201_CREATED)
-
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 class ChampLexicaleViews(viewsets.ModelViewSet):
     queryset = ChampLexicale.objects.all().order_by('Nivform')
     serializer_class = ChampSerializer
- 
+    authentication_classes= [authentication.SessionAuthentication,authentication.TokenAuthentication]
+    permission_classes = [permissions.IsAuthenticated]
 
 
 class ContenuListviews(generics.ListAPIView):
-    queryset= Contenir.objects.filter(NomChamp=1).order_by('NomChamp')
+    queryset= Contenir.objects.all().order_by('NomChamp')
     serializer_class=ContenuSerializer
+    authentication_classes= [authentication.SessionAuthentication,authentication.TokenAuthentication]
+    permission_classes = [permissions.IsAuthenticated]
 
 class ContenuDetailViews(generics.RetrieveAPIView):
-    queryset= Contenir.objects.all()
+    queryset= Contenir.objects.all().order_by('NomChamp')
     serializer_class= ContenuSerializer
     lookup_field= 'id_Contenir'
+    authentication_classes= [authentication.SessionAuthentication,authentication.TokenAuthentication]
+    permission_classes = [permissions.IsAuthenticated]
+
+
+class ContenuCreatViews(generics.ListCreateAPIView):
+    queryset= Contenir.objects.all().order_by('NomChamp')
+    serializer_class= ContenusSerializer
+    authentication_classes= [authentication.SessionAuthentication,authentication.TokenAuthentication]
+    permission_classes = [permissions.IsAuthenticated]
+
 
 class Niveauviews(viewsets.ModelViewSet):
     queryset= NiveauFormation.objects.all()
     serializer_class=NiveauSerializer
-    
+    authentication_classes= [authentication.SessionAuthentication,authentication.TokenAuthentication]
+    permission_classes = [permissions.IsAuthenticated]
+
 class Motfrviews(viewsets.ModelViewSet):
     queryset= MotFr.objects.all()
     serializer_class=MotFrSerializer
+    authentication_classes= [authentication.SessionAuthentication,authentication.TokenAuthentication]
+    permission_classes = [permissions.IsAuthenticated]
 
  
 class Traduireviews(viewsets.ModelViewSet):
     queryset= Traduires.objects.all()
     serializer_class=TraductionSerializer
-
+    authentication_classes= [authentication.SessionAuthentication,authentication.TokenAuthentication]
+    permission_classes = [permissions.IsAuthenticated]

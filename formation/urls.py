@@ -3,6 +3,7 @@ from .views import *
 from . import views 
 
 from rest_framework.routers import DefaultRouter 
+from rest_framework.authtoken.views import obtain_auth_token
 
 router1 = DefaultRouter()
 router1.register("Niveau",views.Niveauviews, basename='niveau')
@@ -27,7 +28,11 @@ urlpatterns = [
     path('Niveau/',include(router1.urls)),
 
     path('champ/', ContenuListviews.as_view()),
-    path('champ/<int:id_Contenir>', ContenuDetailViews.as_view())
+    path('champ/create', ContenuCreatViews.as_view()),
+
+    path('champ/<int:id_Contenir>', ContenuDetailViews.as_view()),
+
+    path('auth', obtain_auth_token),
 
  ]
  

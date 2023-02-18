@@ -14,7 +14,8 @@ class MotFrSerializer(serializers.ModelSerializer):
         model= MotFr 
         fields = ["ecriture","Traduction",] 
 
-class ContenuSerializer(serializers.ModelSerializer):
+#table contenir
+class ContenuSerializer(serializers.Serializer):
     #champ = serializers.CharField(source="NomChamp.NomChamp", read_only=True, )
     mots = MotFrSerializer(source='id_Mot' ,read_only=True)
 
@@ -24,9 +25,16 @@ class ContenuSerializer(serializers.ModelSerializer):
    # def get_mots(self,obj):
    #     return{'mot_francais':obj.id_Mot.ecriture, 'id':obj.id_Mot.pk}
 
+class ContenusSerializer(serializers.ModelSerializer):
+    #champ = serializers.CharField(source="NomChamp.NomChamp", read_only=True, )
+
+    class Meta:
+        model= Contenir 
+        fields="__all__"
 
 
 
+#Table contenant les champs lexicaux
 
 class ChampSerializer(serializers.ModelSerializer):
     Niv = serializers.CharField(source="Nivform.libelleNiveauFormation", read_only=True)
@@ -36,6 +44,7 @@ class ChampSerializer(serializers.ModelSerializer):
         fields= ["Niv","champ", "NomChamp", "Nivform",]
 
 
+#Table des Niveaux
 class NiveauSerializer(serializers.ModelSerializer):
     niveau = ChampSerializer(read_only=True, many=True)
     class Meta:

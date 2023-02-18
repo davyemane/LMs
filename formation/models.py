@@ -19,7 +19,6 @@ class ChampManager(models.Manager):
 
 class Langue(models.Model):
     id_langue = models.AutoField(null=False, primary_key=True)
-
     libelleLangue=models.TextField(null= False)
     def __str__(self):
         return self.libelleLangue 

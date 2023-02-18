@@ -13,5 +13,6 @@ admin.site.register(ChampLexicale)
 admin.site.register(MotFr)
 admin.site.register(Contenir)
 
+admin.site.register(Traduires)
 
 # Register your models here.
